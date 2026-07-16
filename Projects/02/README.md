@@ -1,6 +1,6 @@
 # 🏦 Bank Account Management System
 
-A comprehensive Python-based bank account management system with a command-line interface. This project demonstrates fundamental programming concepts including user authentication, data management, and transaction processing.
+A comprehensive Python-based bank account management system with a command-line interface. This project demonstrates fundamental programming concepts including user authentication, data management, and financial transactions.
 
 ---
 
@@ -24,6 +24,7 @@ A comprehensive Python-based bank account management system with a command-line 
 - **User Registration**: Create a new account with username and secure password (minimum 6 characters)
 - **User Login**: Secure authentication with 3 login attempts limit
 - **Password Management**: Change password with old password verification
+- **Username Management**: Change your username at any time
 
 ### 💰 Banking Operations
 - **Check Balance**: View your current account balance in EGP (Egyptian Pound)
@@ -32,14 +33,19 @@ A comprehensive Python-based bank account management system with a command-line 
 - **Transfer**: Send money to other registered users securely
 - **Logout**: Secure session termination
 
+### 📊 Transaction Features
+- **Receipt Printing**: Get a detailed receipt for every transaction (Deposit, Withdraw, Transfer)
+- **Last Transaction Tracking**: View details of your most recent transaction
+- **User Count Display**: See how many users are registered in the bank
+
 ---
 
 ## 📸 Screenshots
 
 ### Main Menu
 ```
-1. Enter To Program
-2. Exit
+1️⃣  Enter To Program
+2️⃣  Exit
 ```
 
 ### Authentication Menu
@@ -47,9 +53,9 @@ A comprehensive Python-based bank account management system with a command-line 
 =============================================
 ========== Welcom To Python Bank ============
 =============================================
- 1. Register
- 2. Login
- 3. Exit
+1️⃣  Register
+2️⃣  Login
+3️⃣  Exit
 ```
 
 ### Bank Operations Menu
@@ -57,13 +63,29 @@ A comprehensive Python-based bank account management system with a command-line 
 ================================
 ========== Bank Menue ==========
 ================================
-1. Check Balance
-2. Deposit
-3. Withdraw
-4. Transfer
-5. Change Password
-6. Logout
-7. Main Menue
+1️⃣  Check Balance
+2️⃣  Deposit💸
+3️⃣  Withdraw💸
+4️⃣  Transfer💱
+5️⃣  Change Password
+6️⃣  Change User Name
+7️⃣  Logout
+8️⃣  Show Last Transacion
+9️⃣  Main Menue
+```
+
+### Receipt Example
+```
+================================================
+------------------🏦 Receipt🧾------------------
+================================================
+Current User Name : Ahmed
+Transacion Type   : Deposit
+The Amount used   : 5000 EGP💸
+Remaining Balance : 5000 EGP💸
+===============================================
+     ❤️  Thank You For Using Our Bank 🏦     
+===============================================
 ```
 
 ---
@@ -125,16 +147,16 @@ Download the `Bank_Account_Management_System.py` file from the repository.
 
 ### Step 1: Start the Program
 ```
-1. Enter To Program
-2. Exit
+1️⃣  Enter To Program
+2️⃣  Exit
 Choice (1/2): 1
 ```
 
 ### Step 2: Register or Login
 ```
-1. Register
-2. Login
-3. Exit
+1️⃣  Register
+2️⃣  Login
+3️⃣  Exit
 Choice (1/2/3): 1
 ```
 
@@ -158,8 +180,10 @@ Once logged in, choose from:
 | 3 | Withdraw | Withdraw money from your account |
 | 4 | Transfer | Send money to another user |
 | 5 | Change Password | Update your account password |
-| 6 | Logout | Exit your account |
-| 7 | Main Menue | Return to main menu |
+| 6 | Change User Name | Change your username |
+| 7 | Logout | Exit your account |
+| 8 | Show Last Transaction | View your last transaction details |
+| 9 | Main Menue | Return to main menu |
 
 ### Example Workflow
 
@@ -174,7 +198,9 @@ Login with Credentials
   ↓
 Perform Banking Operations (Deposit, Withdraw, Transfer, etc.)
   ↓
-Logout (6)
+View Receipt & Transaction History
+  ↓
+Logout (7)
   ↓
 Exit Program (2)
   ↓
@@ -201,6 +227,9 @@ END
 | `withdraw()` | Handle withdrawal operations |
 | `transfer()` | Handle money transfer between users |
 | `changePassword()` | Update user password |
+| `changeUsername()` | Update user username |
+| `showLastTransaction()` | Display last transaction details |
+| `printReceipt()` | Generate and display transaction receipt |
 | `logout()` | End user session |
 
 ### Data Storage
@@ -209,7 +238,8 @@ END
 users = {
     "Username": {
         "Password": "password123",
-        "Balance": 5000
+        "Balance": 5000,
+        "lastTransaction": "Deposit 5000 EGP💸"
     }
 }
 ```
@@ -217,6 +247,7 @@ users = {
 **Key Points:**
 - Data stored in dictionary (volatile - lost on exit)
 - Single global `userName` variable tracks current user
+- Transaction history tracked in `lastTransaction` field
 - No database persistence
 
 ### Validation
@@ -227,6 +258,8 @@ users = {
 - ✅ Withdrawal amount verified against balance
 - ✅ Transfer recipient existence verified
 - ✅ Self-transfer prevented
+- ✅ Amount validation (no negative deposits/withdrawals)
+- ✅ Password verification for changes
 
 ---
 
@@ -241,15 +274,16 @@ users = {
 
 ### Short Term
 - [ ] Add persistent data storage (JSON file)
-- [ ] Implement transaction history
-- [ ] Add transaction receipt printing
-- [ ] Email confirmation for transfers
+- [ ] Implement detailed transaction history
+- [ ] Add email confirmation for transfers
+- [ ] Transaction receipt saving to file
 
 ### Medium Term
 - [ ] Add password hashing (security improvement)
 - [ ] Create GUI with Tkinter or PyQt
 - [ ] Add account recovery functionality
 - [ ] Implement admin panel
+- [ ] Add account balance statements
 
 ### Long Term
 - [ ] Migrate to database (SQLite/MySQL)
@@ -258,6 +292,7 @@ users = {
 - [ ] Add multi-factor authentication (MFA)
 - [ ] Banking fee calculations
 - [ ] Loan and investment features
+- [ ] Mobile app support
 
 ---
 
@@ -271,11 +306,14 @@ users = {
 2. **No Password Encryption**: Passwords are stored in plain text
    - Solution: Implement password hashing (use `hashlib` or `bcrypt`)
 
-3. **No Transaction History**: Only current balance is tracked
-   - Solution: Maintain transaction log
+3. **Limited Transaction History**: Only last transaction is tracked
+   - Solution: Maintain complete transaction log with timestamps
 
 4. **Single User Session**: Only one user can be logged in at a time
    - Solution: Implement multi-user concurrent sessions
+
+5. **No Receipt File Export**: Receipts only display on console
+   - Solution: Export receipts to PDF or text files
 
 ### Security Recommendations
 
@@ -284,6 +322,7 @@ users = {
 - Add role-based access control
 - Use HTTPS if converted to web application
 - Add logging for all transactions
+- Implement database backup system
 
 ---
 
@@ -292,11 +331,12 @@ users = {
 Feel free to fork this repository and submit pull requests with improvements!
 
 ### Suggested Improvements
-- Add more banking features
-- Improve error handling
-- Optimize code structure
+- Add more banking features (savings accounts, interest calculation)
+- Improve error handling and validation
+- Optimize code structure with OOP
 - Add comprehensive unit tests
-- Refactor with object-oriented programming (OOP)
+- Refactor with classes and better architecture
+- Add multi-language support
 
 ---
 
@@ -326,3 +366,4 @@ Please consider giving this repository a star ⭐ on GitHub!
 
 **Last Updated**: 2026  
 **Status**: Active Development
+**Version**: 2.0 - Enhanced with Receipt & Transaction Features
